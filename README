@@ -1,0 +1,48 @@
+dtinyurl - URL shortening App for django
+----------------------------------------
+
+A lot of applicaiton require URL shortening services, primarily thanks for
+advent of twitter like micro blogging services. There are other cases when
+URL shortening services may be preferred, for example for click tracking,
+some services set shortened URL on their domain, linking it to resources all
+over the net and pass on the shortened URL for tracking purposes. Finally
+there might be a requirement of showing off site resources "framed" within a
+"chrome" provided by owner, as can be seen in "diggbar" etc. 
+
+For all these use cases dtinyurl django application may be used. 
+
+dintyurl provides 4 main actions:
+
+ * "redirect to": ex. http://example.com/XCDF redirects to http://google.com
+ * "forward to": http://example.com/SDW8 calls "myapp.views.myview"
+ * "inline the URL": http://example.com/SDER "inlines" the http://google.com
+ * "Call model.render()": http://example.com/3243 calls Model.render()
+
+dtinyurl provides the main model dtinyurl.models.TinyURL, this model is
+responsible for creating unique short key, and stores an association of this
+key with the content associated with it. Associated content is related
+through django's generic relation, and is optional. 
+
+dtinyurl provides a view, dtinyurl.views.handle_tiny_url, that takes a
+tiny_id and handles the main actions detailed above. It requires a temaplate
+dtinyurl/inline.html, which gets access to contect variable tiny_url, which
+is to be inlined. 
+
+To use this app, add 'dtinyurl' under INSTALLED_APPS in your settings.py and
+add:
+
+    urlpatterns = patterns('dtinyurl.views',
+        (r'(?P<tiny_id>[^/]+)/$', 'handle_tiny_url'),
+    )
+
+to your urls.py. 
+
+dtinyurl.models contains a few convenient models that can be used as base
+class for your apps that want to use tinyurl functionality.
+
+ * dtinyurl.models.TinyURLBase, provides field tiny_url to model. 
+ * dtinyurl.models.TinyURLForwarder: forwards to MyModel.view, which is a
+   string.
+ * dtinyurl.models.TinyURLRedirector: redirects to mymodel.get_absolute_url()
+
+
