@@ -45,6 +45,8 @@ class TinyURL(models.Model):
         self.tiny_id, self.content_object
     )
 
+    def get_absolute_url(self): return "/%s" % self.tiny_id
+
     def save(self, *args, **kw):
         if not self.tiny_id:
             while True:
