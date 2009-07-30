@@ -89,5 +89,7 @@ class TinyURLRedirector(TinyURLBase):
     def save(self, *args, **kw):
         super(TinyURLRedirector, self).save(*args, **kw)
         if not self.tiny_url.count():
-            self.tiny_url.create(action="r", data=self.get_absolute_url())
+            t = self.tiny_url.create(action="r")
+            t.data = self.get_absolute_url2()
+            t.save()
 # }}}  
